@@ -8,5 +8,8 @@ __pycache__/
 # Ignore environment files
 .env
 
-# macOS specific
+# MacOS specific
 .DS_Store
+
+# Ignore my draft during the class
+draft/
