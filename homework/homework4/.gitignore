@@ -1,0 +1,15 @@
+# Ignore local class materials
+class_materials/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore environment files
+.env
+
+# MacOS specific
+.DS_Store
+
+# Ignore my draft during the class
+draft/
