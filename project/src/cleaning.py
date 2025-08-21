@@ -1,48 +1,33 @@
+from __future__ import annotations
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import numpy as np
+from typing import Iterable
 
-def fill_missing_median(df, columns):
+def fill_missing_median(df: pd.DataFrame, cols: Iterable[str]) -> pd.DataFrame:
+    out = df.copy()
+    for c in cols:
+        if c in out.columns and pd.api.types.is_numeric_dtype(out[c]):
+            med = out[c].median()
+            out[c] = out[c].fillna(med)
+    return out
 
-    df_cleaned = df.copy()
-    for col in columns:
-        if col in df_cleaned.columns and pd.api.types.is_numeric_dtype(df_cleaned[col]):
-            median_val = df_cleaned[col].median()
-            df_cleaned[col] = df_cleaned[col].fillna(median_val)
-    return df_cleaned
+def drop_missing(df: pd.DataFrame, threshold: float = 0.5) -> pd.DataFrame:
+    out = df.copy()
+    # drop columns above threshold missing
+    col_missing = out.isna().mean()
+    to_drop = [c for c, r in col_missing.items() if r > threshold]
+    if to_drop:
+        out = out.drop(columns=to_drop)
+    # drop remaining rows with any missing
+    out = out.dropna(axis=0, how='any')
+    return out
 
-def drop_missing(df, threshold=0.5):
-
-    df_cleaned = df.copy()
-
-    # Drop columns with missing value proportion above threshold
-    initial_cols = df_cleaned.shape[1]
-    cols_to_drop = [col for col in df_cleaned.columns if df_cleaned[col].isnull().sum() / len(df_cleaned) > threshold]
-    df_cleaned = df_cleaned.drop(columns=cols_to_drop)
-    print(f"Dropped {len(cols_to_drop)} columns due to more than {threshold*100}% missing values.")
-
-    # Drop any remaining rows with missing values
-    initial_rows = df_cleaned.shape[0]
-    df_cleaned = df_cleaned.dropna()
-    print(f"Dropped {initial_rows - df_cleaned.shape[0]} rows due to remaining missing values.")
-
-    return df_cleaned
-
-def normalize_data(df, columns, method='minmax'):
-
-    df_normalized = df.copy()
-    
-    if method == 'minmax':
-        scaler = MinMaxScaler()
-    elif method == 'standard':
-        scaler = StandardScaler()
-    else:
-        raise ValueError("Method must be 'minmax' or 'standard'.")
-
-    for col in columns:
-        if col in df_normalized.columns and pd.api.types.is_numeric_dtype(df_normalized[col]):
-            # Reshape the column for the scaler (expects 2D array)
-            df_normalized[col] = scaler.fit_transform(df_normalized[[col]])
-        else:
-            print(f"Warning: Column '{col}' not found or not numeric. Skipping normalization for this column.")
-            
-    return df_normalized
+def normalize_data(df: pd.DataFrame, cols: Iterable[str]) -> pd.DataFrame:
+    out = df.copy()
+    for c in cols:
+        if c in out.columns and pd.api.types.is_numeric_dtype(out[c]):
+            mu = out[c].mean()
+            sigma = out[c].std(ddof=0)
+            if sigma and not np.isnan(sigma) and sigma != 0:
+                out[c] = (out[c] - mu) / sigma
+    return out
