@@ -1,0 +1,12 @@
+### Deployment Risks:
+If deployed, our predictive model faces several risks. First, **Data Drift** could occur if the statistical properties of incoming features (e.g., market volatility, economic indicators) change over time, making our model's assumptions invalid. Second, **Data Quality Degradation** is a significant threat; an increase in null values or a schema change from an upstream data source could cause prediction failures. Lastly, **Concept Drift**, where the relationship between features and the target variable changes (e.g., due to a new market regime), could silently degrade model performance over time.
+
+### Monitoring Metrics Across Layers:
+To mitigate these risks, we would implement a multi-layered monitoring strategy:
+* **Data Layer**: We will monitor the **null rate** for key input features, alerting the Data Engineering on-call team if it exceeds 5%. Data **freshness** will also be tracked, with an alert if the latest data batch is more than 60 minutes old.
+* **Model Layer**: A **rolling 7-day Mean Absolute Error (MAE)** will be our primary performance metric. If the MAE increases by 15% above the baseline established during training, the Data Science team will be notified to investigate. We will trigger a model retraining pipeline if the Population Stability Index (PSI) on key features exceeds 0.1, indicating significant data drift.
+* **System Layer**: We will monitor the API's **p95 prediction latency**, with a threshold of 250ms triggering an alert to the Platform on-call team. We will also track the **server error rate**, aiming to keep it below 0.1%.
+* **Business Layer**: We will monitor a key business KPI, such as the **rate of successful trades based on model signals**. A sustained dip of 10% below the quarterly average would trigger a weekly review by the Business Analyst team.
+
+### Ownership & Handoffs:
+Clear ownership is crucial for ongoing maintenance. The **Data Science team** owns the model logic, performance monitoring dashboards, and the retraining process. The **Platform team** owns the API infrastructure, including system-level monitoring (latency, errors) and approves any rollbacks. The **Data Engineering team** is responsible for the upstream data pipelines and data quality alerts. Handoffs will be managed via a shared Jira board where issues are logged, assigned, and tracked through resolution.

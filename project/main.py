@@ -42,7 +42,7 @@ from scripts.acquire import acquire_api, acquire_scrape
 from scripts.preprocess import ensure_dataset
 
 # Set a random seed for reproducibility.
-np.random.seed(17)
+np.random.seed(69)
 
 
 def ensure_dirs():

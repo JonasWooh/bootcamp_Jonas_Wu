@@ -13,3 +13,6 @@ __pycache__/
 
 # Ignore my draft during the class
 draft/
+
+# Ignore a useless hide folder
+.ipynb_checkpoints/
