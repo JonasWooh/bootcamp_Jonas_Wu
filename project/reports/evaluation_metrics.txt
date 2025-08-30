@@ -1,0 +1,15 @@
+
+# Model Evaluation Report
+
+This report summarizes the performance of the regression model based on the test dataset.
+
+## Performance Metrics
+-----------------------------------
+- R-squared (R²):           0.0043
+- Root Mean Squared Error (RMSE): 0.027764
+- Mean Absolute Error (MAE):    0.013897
+-----------------------------------
+
+## Interpretation
+- **R-squared (R²)**: This value indicates that approximately 0.43% of the variance in the target variable (daily returns) can be explained by our model. An R² close to 0, as seen here, suggests the model has very little predictive power, which is common in financial markets for simple models.
+- **RMSE & MAE**: These metrics measure the average error of the model's predictions in the same units as the target (daily returns). For example, an RMSE of 0.0278 means the typical prediction error is about 2.78%.

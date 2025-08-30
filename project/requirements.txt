@@ -1,9 +1,18 @@
+# Data Analysis and Manipulation
 pandas
 numpy
+scipy
+
+# Machine Learning
 scikit-learn
+
+# Data Visualization
 matplotlib
-requests
-beautifulsoup4
+seaborn
+
+# API / Productization
+flask
+
+# Utilities
 python-dotenv
-yfinance
 pyarrow

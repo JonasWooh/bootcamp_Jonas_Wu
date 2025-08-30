@@ -1,8 +1,15 @@
-.env
+# Ignore Python cache files
 __pycache__/
-.ipynb_checkpoints/
-.DS_Store
 *.pyc
-data/raw/*.csv
-data/interim/*
-data/processed/*
+
+# Ignore environment files
+.env
+
+# MacOS specific
+.DS_Store
+
+# Ignore my draft
+draft/
+
+# Ignore a useless hide folder
+.ipynb_checkpoints/
